@@ -15,3 +15,22 @@
         (filter is-possible-triangle? 
             (map parse-lengths 
                 (clojure.string/split-lines input))))) 
+
+(defn- convert-set-of-horizontal-lengths-to-vertical [lengths]
+    (let [first-length (first lengths)
+        second-length (second lengths)
+        third-length (nth lengths 2)
+        map-fn #(vector (nth first-length %) (nth second-length %) (nth third-length %))
+    ]
+    (map map-fn (range 3))
+))
+
+(defn- to-vertical-lengths [lengths]
+    (apply concat (map convert-set-of-horizontal-lengths-to-vertical (partition 3 3 lengths))))
+
+(defn count-vertical-triangles [input]
+    (count 
+        (filter is-possible-triangle? 
+            (to-vertical-lengths 
+                (map parse-lengths 
+                    (clojure.string/split-lines input))))))

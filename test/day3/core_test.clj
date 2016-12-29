@@ -15,3 +15,13 @@
       (is (= 1 (count-triangles "  541  588  421")))
       (is (= 993 (count-triangles test-input)))
       ))
+
+(deftest count-possible-vertical-triangles
+    (testing "Simple examples"
+        (is (= 0 (count-vertical-triangles "1 1 1\n2 2 2\n3 3 3"))))
+
+    (testing "Complex examples"
+        (is (= 1849 (count-vertical-triangles test-input))))
+    )
+
+
