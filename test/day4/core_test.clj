@@ -12,6 +12,7 @@
     (testing "generate-checksum"
         (is (= "abxyz" (generate-checksum "aaaaa-bbb-z-y-x")))
         (is (= "abxyz" (generate-checksum "bbb-z-aaaaa-y-x")))
+        (is (= "zimth" (generate-checksum "qzmt-zixmtkozy-ivhz")))
         ) 
     )
 
@@ -33,3 +34,18 @@
         (is (= 245102 (sector-ids-sum-for-valid-rooms test-input)))
         )
     )
+
+(deftest decrypt-names
+    (testing "decrypt-name"
+        (is (= "very encrypted name" (decrypt-name {:name "qzmt-zixmtkozy-ivhz" :sector-id 343})))
+    )
+    (testing "decrypt-all-valid-rooms"
+        (is (= [{:sector-id 343, :decrypted-name "very encrypted name"}] (decrypt-all-valid-rooms "qzmt-zixmtkozy-ivhz-343[zimth]")))
+        (is (= 324 (->>
+            test-input
+            decrypt-all-valid-rooms
+            (filter #(= (:decrypted-name %) "northpole object storage"))
+            first
+            :sector-id
+    ))))
+)

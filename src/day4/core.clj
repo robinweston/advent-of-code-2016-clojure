@@ -25,11 +25,34 @@
 (defn is-valid-room? [room]
     (= (:checksum room) (generate-checksum (:name room))))
 
-(defn sector-ids-sum-for-valid-rooms [input]
+(defn- filter-valid-rooms [input]
     (->> input
         clojure.string/split-lines
         (map extract-room-info)
         (filter is-valid-room?)
+))
+
+(defn sector-ids-sum-for-valid-rooms [input]
+    (->> input
+        filter-valid-rooms
         (map :sector-id)
         (reduce +)
+))
+
+(defn- shift-word [word offset]
+    (let [alphabet "abcdefghijklmnopqrstuvwxyz"
+          lookup (assoc (zipmap alphabet (drop offset (cycle alphabet))) \- " ")]
+    (->> word
+        seq
+        (map #(get lookup %))
+        clojure.string/join
+)))
+
+(defn decrypt-name [room-info]
+    (shift-word (:name room-info) (:sector-id room-info)))
+
+(defn decrypt-all-valid-rooms [input]
+    (->> input
+        filter-valid-rooms
+        (map #(hash-map :decrypted-name (decrypt-name %) :sector-id (:sector-id %)))
 ))
