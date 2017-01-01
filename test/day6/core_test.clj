@@ -17,5 +17,11 @@
       (is (= "afwlyyyq" (decode-message input)))
     )
     
+  (testing "decode-advanced-message"
+      (is (= "top" (decode-advanced-message "top")))
+      (is (= "advent" (decode-advanced-message sample-input)))
+      (is (= "bhkzekao" (decode-advanced-message input)))
+    )
+
     )
 

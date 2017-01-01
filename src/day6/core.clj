@@ -24,10 +24,20 @@
     (key (apply max-key val frequencies))
     )
 
-(defn decode-message [input]
+(defn- min-character [frequencies]
+    (key (apply min-key val frequencies))
+    )
+
+(defn- decode-message-with-character-map [input char-map-fn]
     (->> 
         input
         character-frequency
-        (map max-character)
+        (map char-map-fn)
         (apply str))
     )
+
+(defn decode-message [input]
+    (decode-message-with-character-map input max-character))
+
+(defn decode-advanced-message [input]
+    (decode-message-with-character-map input min-character))
