@@ -1,14 +1,4 @@
-# day2-clojure
+# advent-of-code-2016-clojure
 
-A Clojure library designed to ... well, that part is up to you.
+Vaguely terrible solutions to https://adventofcode.com/2016/
 
-## Usage
-
-FIXME
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
