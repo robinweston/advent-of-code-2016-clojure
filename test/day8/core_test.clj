@@ -48,4 +48,6 @@
         (is (= 6 (process-commands-then-count-pixels 7 3 "rect 3x2/nrotate column x=1 by 1/nrotate row y=0 by 4/nrotate column x=1 by 1")))    
         (is (= 115 (process-commands-then-count-pixels 50 6 input)))    
     )
+
+    ;(process-commands-then-print-grid 50 6 input) 
 )

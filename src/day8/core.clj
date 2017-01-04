@@ -52,6 +52,24 @@
 (defn- count-grid-pixels [grid]
     (reduce #(+ (count-row-pixels %2) %1) 0 grid))
 
+(defn process-commands [grid-width grid-height command-texts]
+    (reduce #(process-command %2 %1) (create-empty-grid grid-width grid-height) (clojure.string/split-lines command-texts)))
+
 (defn process-commands-then-count-pixels [grid-width grid-height command-texts]
-    (count-grid-pixels 
-        (reduce #(process-command %2 %1) (create-empty-grid grid-width grid-height) (clojure.string/split-lines command-texts))))
+    (->> (process-commands grid-width grid-height command-texts)
+        count-grid-pixels))
+
+(defn- print-letter [letter]
+    (doseq [pixel letter] (print (if pixel "x" " ")))
+    (print "     "))
+
+(defn- print-row [row]
+    (doseq [letter (partition 5 row)] (print-letter letter))
+    (print "\n"))
+
+(defn- print-grid [grid]
+    (doseq [row grid] (print-row row)))
+
+(defn process-commands-then-print-grid [grid-width grid-height command-texts]
+    (->> (process-commands grid-width grid-height command-texts)
+        print-grid))
