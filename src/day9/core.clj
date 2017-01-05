@@ -34,6 +34,24 @@
 (defn- remove-overlapped-markers [markers]
     (remove #(marker-is-overlapped? markers %) markers))
 
+(defn- multiply-reps-for-markers-that-overlap [markers marker]
+    (->> 
+        (filter #(markers-overlap? % marker) markers)
+        (reduce #(* %1 (:reps %2)) 1)    
+    ))
+
+(defn- multiply-marker-reps-if-overlapped [markers marker]
+    (update marker :reps * (multiply-reps-for-markers-that-overlap markers marker)))
+
+(defn- marker-is-before-another-marker? [input marker]
+    (= (str (nth input (+ (:start marker) (:length marker)))) "("))
+
+(defn- combine-overlapped-markers [input markers]
+    (->> markers
+        (map #(multiply-marker-reps-if-overlapped markers %))
+        (map #(if (marker-is-before-another-marker? input %) (assoc % :chars 0) %))
+    ))
+
 (defn- calculate-new-input-length [input markers]
     (+ (count input)
         (reduce #(- %1 (:length %2)) 0 markers)
@@ -46,3 +64,11 @@
         (parse-markers)
         (remove-overlapped-markers)
         (calculate-new-input-length input)))
+
+(defn super-decompressed-length [input]
+    (->> input
+        (re-pos #"\(\w+\)")
+        (parse-markers)
+        (combine-overlapped-markers input)
+       (calculate-new-input-length input)
+    ))
