@@ -13,4 +13,10 @@
         (is (= 0 (shortest-distance "L1, L1, L1, L1")))   
         (is (= 78 (shortest-distance "R78")))   
         (is (= 332 (shortest-distance input)))   
-    ))
+    )
+    
+    (testing "first-position-visited-twice"
+        (is (= 4 (shortest-distance-to-first-position-visited-twice "R8, R4, R4, R8")))
+        (is (= 166 (shortest-distance-to-first-position-visited-twice input)))
+    )
+    )

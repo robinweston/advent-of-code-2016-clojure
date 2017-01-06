@@ -47,16 +47,36 @@
         instructions
     ))
 
-(defn- shortest-path [positions]
-    (->> positions
-        last
+(defn- instructions->path [instructions]
+    (->> instructions
+        (re-seq #"[R|L]\d+")
+        follow-instructions))
+
+(defn- distance-to-position [position]
+    (->> position
         :coords
-        (reduce #(+ %1 (Math/abs %2)) 0))
-)
+        (reduce #(+ %1 (Math/abs %2)) 0)
+))
 
 (defn shortest-distance [input]
-    (->> input
-        (re-seq #"[R|L]\d+")
-        follow-instructions
-        shortest-path
+    (->> input 
+        instructions->path        
+        last
+        distance-to-position
     ))
+
+(defn- first-position-visited-twice [positions]
+    (loop [[x & xs] positions seen #{}]
+        (if (contains? seen (:coords x))
+            x
+            (recur xs (conj seen (:coords x)))
+        )
+))
+
+(defn shortest-distance-to-first-position-visited-twice [input]
+    (->> input 
+        instructions->path
+        first-position-visited-twice 
+        distance-to-position
+))
+
